@@ -4,6 +4,7 @@ import com.seowon.coding.domain.model.Order;
 import com.seowon.coding.domain.model.OrderItem;
 import com.seowon.coding.domain.model.ProcessingStatus;
 import com.seowon.coding.domain.model.Product;
+import com.seowon.coding.domain.model.Order.OrderStatus;
 import com.seowon.coding.domain.repository.OrderRepository;
 import com.seowon.coding.domain.repository.ProcessingStatusRepository;
 import com.seowon.coding.domain.repository.ProductRepository;
@@ -64,6 +65,15 @@ public class OrderService {
         // * order 를 저장
         // * 각 Product 의 재고를 수정
         // * placeOrder 메소드의 시그니처는 변경하지 않은 채 구현하세요.
+
+        Order newOrder = newOrder.builder()
+        .customerName(customerName)
+        .customerEmail(customerEmail)
+        .status(OrderStatus.PENDING)
+        .orderDate(LocalDateTime.now())
+        .items()
+        .build();
+
         return null;
     }
 
