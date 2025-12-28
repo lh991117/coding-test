@@ -66,13 +66,27 @@ public class OrderService {
         // * 각 Product 의 재고를 수정
         // * placeOrder 메소드의 시그니처는 변경하지 않은 채 구현하세요.
 
-        Order newOrder = newOrder.builder()
-        .customerName(customerName)
-        .customerEmail(customerEmail)
-        .status(OrderStatus.PENDING)
-        .orderDate(LocalDateTime.now())
-        .items()
+        OrderProduct orderProduct = orderProduct.builder()
+        .productId(productIds)
+        .quantity(quantities)
         .build();
+
+        OrderItem orderItem = orderItem.builder()
+        .product(productRepository.findByIds(productIds))
+        .quantity(quantities)
+        .build();
+
+        Order newOrder = newOrder.builder()
+            .customerName(customerName)
+            .customerEmail(customerEmail)
+            .status(OrderStatus.PENDING)
+            .orderDate(LocalDateTime.now())
+            .items(orderItem)
+            .build();
+
+        productRepository.findByIds(productIds);
+        
+        orderRepository.save(newOrder);
 
         return null;
     }
@@ -86,9 +100,13 @@ public class OrderService {
                                String customerEmail,
                                List<OrderProduct> orderProducts,
                                String couponCode) {
-        if (customerName == null || customerEmail == null) {
-            throw new IllegalArgumentException("customer info required");
-        }
+
+        orderRepository.findByCustomerEmail(customerEmail);
+        orderRepository.findByCustomerName(customerName);
+        
+        // if (customerName == null || customerEmail == null) {
+        //     throw new IllegalArgumentException("customer info required");
+        // }
         if (orderProducts == null || orderProducts.isEmpty()) {
             throw new IllegalArgumentException("orderReqs invalid");
         }
